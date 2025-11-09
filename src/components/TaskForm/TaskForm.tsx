@@ -1,34 +1,24 @@
-import { Task } from '@/types/tasks';
+import { DraftTask, Task } from '@/types/tasks';
 import { useEffect, useState } from 'react';
 
 interface TaskFormProps {
-  task: Partial<Task>;
-  onSave: (task: Task) => void;
+  task: DraftTask;
+  onSave: (draft: DraftTask) => void;
 }
 
 export default function TaskForm({ task, onSave }: TaskFormProps) {
-  const [title, setTitle] = useState(task.title || '');
-  const [description, setDescription] = useState(task.description || '');
+  const [draft, setDraft] = useState<DraftTask | Task>({ ...task });
 
   useEffect(() => {
-    setTitle(task.title || '');
-    setDescription(task.description || '');
+    setDraft({ ...task });
   }, [task]);
 
   function submit() {
-    const savedTask: Task = {
-      ...task,
-      title,
-      description,
-    };
-    onSave(savedTask);
-    setTitle('');
-    setDescription('');
+    onSave(draft);
   }
 
   return (
     <form
-      id="task-form"
       className="p-4 bg-slate-200 rounded-md"
       onSubmit={(e) => {
         e.preventDefault();
@@ -40,8 +30,8 @@ export default function TaskForm({ task, onSave }: TaskFormProps) {
           placeholder="Título da tarefa"
           type="text"
           required
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={draft.title}
+          onChange={(e) => setDraft({ ...draft, title: e.target.value })}
           className="mt-1 w-full p-2 border rounded-md bg-white"
         />
       </div>
@@ -49,15 +39,15 @@ export default function TaskForm({ task, onSave }: TaskFormProps) {
       <div className="mb-4">
         <textarea
           placeholder="Descrição"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={draft.description}
+          onChange={(e) => setDraft({ ...draft, description: e.target.value })}
           rows={3}
           className="mt-1 w-full p-2 border rounded-md bg-white"
-        ></textarea>
+        />
       </div>
 
       <button className="w-full cursor-pointer bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
-        {task.id ? 'Salvar Tarefa' : 'Adicionar Tarefa'}
+        {'id' in task ? 'Salvar Tarefa' : 'Adicionar Tarefa'}
       </button>
     </form>
   );

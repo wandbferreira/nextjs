@@ -2,15 +2,15 @@ import { Task } from '@/types/tasks';
 
 interface TaskListProps {
   tasks: Task[];
-  onToggle: (task: Task) => void;
-  onDelete: (task: Task) => void;
+  onToggle: (taskId: number) => void;
+  onRemove: (taskId: number) => void;
   onEdit: (task: Task) => void;
 }
 
 export default function TaskList({
   tasks,
   onToggle,
-  onDelete,
+  onRemove,
   onEdit,
 }: TaskListProps) {
   return (
@@ -22,7 +22,7 @@ export default function TaskList({
         >
           <button
             className="bg-slate-200 hover:bg-slate-300 flex w-full rounded p-3"
-            onClick={() => onToggle(task)}
+            onClick={() => onToggle(task.id)}
           >
             <span className="w-full">{task.title}</span>
             <span>{task.completed ? '✅' : '⬜'}</span>
@@ -38,7 +38,7 @@ export default function TaskList({
 
           <button
             aria-label="Excluir tarefa"
-            onClick={() => onDelete(task)}
+            onClick={() => onRemove(task.id)}
             className="bg-slate-200 hover:bg-slate-300 rounded p-3"
           >
             ❌

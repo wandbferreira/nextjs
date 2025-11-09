@@ -1,6 +1,11 @@
 export interface Task {
-  id?: string;
+  id: number;
   title: string;
   description: string;
-  completed?: boolean;
+  completed: boolean;
 }
+
+export type DraftTask = Partial<Task> & {
+  title: string;
+  description: string;
+};
