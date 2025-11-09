@@ -12,3 +12,7 @@ export function saveTasks(tasks: Task[]): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
   }
 }
+
+export function generateId(): number {
+  return Date.now();
+}

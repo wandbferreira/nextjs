@@ -7,10 +7,10 @@ interface TaskFormProps {
 }
 
 export default function TaskForm({ task, onSave }: TaskFormProps) {
-  const [draft, setDraft] = useState<DraftTask | Task>({ ...task });
+  const [draft, setDraft] = useState<DraftTask | Task>(task);
 
   useEffect(() => {
-    setDraft({ ...task });
+    setDraft(task);
   }, [task]);
 
   function submit() {
@@ -47,7 +47,7 @@ export default function TaskForm({ task, onSave }: TaskFormProps) {
       </div>
 
       <button className="w-full cursor-pointer bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
-        {'id' in task ? 'Salvar Tarefa' : 'Adicionar Tarefa'}
+        {task.id ? 'Salvar Tarefa' : 'Adicionar Tarefa'}
       </button>
     </form>
   );
