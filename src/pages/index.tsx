@@ -1,56 +1,69 @@
-import Header from "@/components/Topo/Topo";
-import Link from "next/link";
+import TaskForm from '@/components/TaskForm/TaskForm';
+import TaskList from '@/components/TaskList/TaskList';
+import { fetchTasks, saveTasks } from '@/services/tasks.service';
+import { useEffect, useState } from 'react';
 
-function getFirstName(nome: string) {
-  return nome.split(" ")[0];
+export interface Task {
+  id?: string;
+  title: string;
+  description: string;
+  completed?: boolean;
 }
 
-function getLastName(nome: string) {
-  return nome.split(" ")[1];
-}
+export default function Tasks() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [task, setTask] = useState<Task>({
+    title: '',
+    description: '',
+  });
 
-const users = [
-  { logged: true, name: "Wanderson Ferreira", formatName: getFirstName },
-  { logged: true, name: "Bernardo Ferreira", formatName: getFirstName },
-  { logged: true, name: "John Smith", formatName: getLastName },
-  { logged: false, name: "Mary Smith", formatName: getLastName },
-];
+  useEffect(() => {
+    setTasks(fetchTasks());
+  }, []);
 
-export default function Home() {
+  function save(task: Task) {
+    let newTasks: Task[] = [...tasks];
+    if (task.id) {
+      newTasks = tasks.map((t) => (t.id === task.id ? { ...t, ...task } : t));
+    } else {
+      newTasks.unshift({ ...task, id: String(Date.now()), completed: false });
+    }
+
+    saveTasks(newTasks);
+    setTasks(newTasks);
+    setTask({
+      title: '',
+      description: '',
+    });
+  }
+
+  function handleToggle(task: Task) {
+    task.completed = !task.completed;
+    save(task);
+  }
+
+  function handleDelete(task: Task) {
+    const newTasks = tasks.filter((t) => t.id !== task.id);
+    saveTasks(newTasks);
+    setTasks(newTasks);
+  }
+
+  function handleEdit(task: Task) {
+    setTask({ ...task });
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
-      {users.map((user, index) => (
-        <Header
-          key={index}
-          logged={user.logged}
-          nome={user.name}
-          formatName={user.formatName}
-        />
-      ))}
+    <main className="m-auto rounded bg-white text-gray-700 p-6">
+      <h1 className="mb-3 text-2xl font-semibold">Gerenciador de Tarefas</h1>
+      <TaskForm task={task} onSave={save} />
+      <p className="mt-6 text-gray-600">Total de {tasks.length} tarefas.</p>
 
-      <nav>
-        <ul className="flex gap-4">
-          <li className="font-bold text-lg">
-            <Link href="/">Inicio</Link>
-          </li>
-          <li>
-            <Link
-              className="font-bold text-lg"
-              href={{
-                pathname: "/contato",
-                query: { ref: "home" },
-              }}
-            >
-              Contato
-            </Link>
-          </li>
-          <li>
-            <Link className="font-bold text-lg" href="/login">
-              Login
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      <TaskList
+        tasks={tasks}
+        onToggle={handleToggle}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+      />
     </main>
   );
 }
