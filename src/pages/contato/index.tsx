@@ -9,7 +9,7 @@ export default function Contato() {
 
       <p>Entre em contato conosco pelo email:</p>
 
-      <p>Você estava em: {ref ?? "23"} </p>
+      <p>Você estava em: {ref ?? "não sei"} </p>
     </main>
   );
 }
