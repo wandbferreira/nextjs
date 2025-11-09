@@ -1,6 +1,20 @@
-function TaskList({ tasks, onToggle, onDelete, onEdit }) {
+import { Task } from '@/types/tasks';
+
+interface TaskListProps {
+  tasks: Task[];
+  onToggle: (task: Task) => void;
+  onDelete: (task: Task) => void;
+  onEdit: (task: Task) => void;
+}
+
+export default function TaskList({
+  tasks,
+  onToggle,
+  onDelete,
+  onEdit,
+}: TaskListProps) {
   return (
-    <ul className="mt-6">
+    <ul className="mt-4 space-y-2">
       {tasks.map((task) => (
         <li
           key={task.id}
@@ -34,5 +48,3 @@ function TaskList({ tasks, onToggle, onDelete, onEdit }) {
     </ul>
   );
 }
-
-export default TaskList;

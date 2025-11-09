@@ -1,16 +1,10 @@
 import TaskForm from '@/components/TaskForm/TaskForm';
 import TaskList from '@/components/TaskList/TaskList';
 import { fetchTasks, saveTasks } from '@/services/tasks.service';
+import { Task } from '@/types/tasks';
 import { useEffect, useState } from 'react';
 
-export interface Task {
-  id?: string;
-  title: string;
-  description: string;
-  completed?: boolean;
-}
-
-export default function Tasks() {
+export default function TaskPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [task, setTask] = useState<Task>({
     title: '',

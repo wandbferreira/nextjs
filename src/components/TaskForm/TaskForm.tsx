@@ -1,4 +1,4 @@
-import { Task } from '@/pages';
+import { Task } from '@/types/tasks';
 import { useEffect, useState } from 'react';
 
 interface TaskFormProps {
