@@ -24,7 +24,6 @@ export default function TaskPage() {
       : tasks.map((t) => (t.id === draft.id ? { ...t, ...draft } : t));
 
     updateTasks(updatedTasks);
-    setDraft({ title: '', description: '' });
   }
 
   function toggle(taskId: number) {

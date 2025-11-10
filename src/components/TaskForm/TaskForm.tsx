@@ -34,13 +34,14 @@ export default memo(function TaskForm({ task, onSave }: TaskFormProps) {
     // 1,1x por deletar o selecionado
     // 1,1x por deletar nao selecionado
     // 1,1x por editar
-    // 1,1x por salvar sem mudanca
-    // 1,1x por salvar com mudanca
-    // 1,1x por salvar novo
+    // 1x por salvar sem mudanca
+    // 1x por salvar com mudanca
+    // 1x por salvar novo
   }, []);
 
   function submit() {
     onSave(draft);
+    setDraft({ title: '', description: '' });
   }
   console.log('this is task form');
 
