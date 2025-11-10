@@ -3,7 +3,7 @@
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 300,
   "editor.codeActionsOnSave": {
-    "source.organizeImports": true
+    "source.organizeImports": "explicit"
   },
   "editor.tabSize": 4,
   "editor.defaultFormatter": "esbenp.prettier-vscode"

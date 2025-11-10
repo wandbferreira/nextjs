@@ -5,6 +5,8 @@ import { DraftTask, Task } from '@/types/tasks';
 import { useEffect, useState } from 'react';
 
 export default function TaskPage() {
+  console.log('this is task page');
+
   const [tasks, setTasks] = useState<Task[]>([]);
   const [draft, setDraft] = useState<DraftTask | Task>({
     title: '',

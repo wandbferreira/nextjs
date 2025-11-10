@@ -1,4 +1,4 @@
-import { Task } from '@/pages';
+import { Task } from '@/types/tasks';
 
 const STORAGE_KEY = 'tasks';
 

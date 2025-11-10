@@ -1,21 +1,48 @@
 import { DraftTask, Task } from '@/types/tasks';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 interface TaskFormProps {
   task: DraftTask;
   onSave: (draft: DraftTask) => void;
 }
 
-export default function TaskForm({ task, onSave }: TaskFormProps) {
+export default memo(function TaskForm({ task, onSave }: TaskFormProps) {
   const [draft, setDraft] = useState<DraftTask | Task>(task);
 
   useEffect(() => {
     setDraft(task);
   }, [task]);
 
+  useEffect(() => {
+    performance.mark('react-mounted');
+    performance.measure('app-bootstrap', 'app-start', 'react-mounted');
+    const m = performance.getEntriesByName('app-bootstrap').at(-1);
+    console.log(`⏱️ App carregou em ${m?.duration.toFixed(2)}ms`);
+
+    // Projeto levou em media 140ms para renderizar com tamanho de 395kb
+    // 900ms com 4g (com gzip)
+    // na aba de rede diz:
+    // - que DOMContentLoad: 30ms
+    // - Finish: 170
+    // (LCP): 0.06 s
+    // (CLS): 0.05
+
+    // Nextjs rodou
+    // 2x inicial
+    // 1x por digitar (mas só o form)
+    // 1x por toggle (talvez o form melhora com memo)
+    // 1,1x por deletar o selecionado
+    // 1,1x por deletar nao selecionado
+    // 1,1x por editar
+    // 1,1x por salvar sem mudanca
+    // 1,1x por salvar com mudanca
+    // 1,1x por salvar novo
+  }, []);
+
   function submit() {
     onSave(draft);
   }
+  console.log('this is task form');
 
   return (
     <form
@@ -51,4 +78,4 @@ export default function TaskForm({ task, onSave }: TaskFormProps) {
       </button>
     </form>
   );
-}
+});

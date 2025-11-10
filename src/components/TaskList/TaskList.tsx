@@ -13,6 +13,8 @@ export default function TaskList({
   onRemove,
   onEdit,
 }: TaskListProps) {
+  console.log('this is tasklist');
+
   return (
     <ul className="mt-4 space-y-2">
       {tasks.map((task) => (
