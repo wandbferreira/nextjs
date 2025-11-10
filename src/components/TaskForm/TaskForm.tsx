@@ -25,14 +25,14 @@ export default memo(function TaskForm({ task, onSave }: TaskFormProps) {
     // - que DOMContentLoad: 30ms
     // - Finish: 170
     // (LCP): 0.06 s
-    // (CLS): 0.05
+    // (CLS): 0.05 (depende da quantidade de tasks)
 
     // Nextjs rodou
-    // 2x inicial
+    // 1x inicial
     // 1x por digitar (mas só o form)
     // 1x por toggle (talvez o form melhora com memo)
-    // 1,1x por deletar o selecionado
-    // 1,1x por deletar nao selecionado
+    // 1x por deletar o selecionado
+    // 1x por deletar nao selecionado
     // 1,1x por editar
     // 1x por salvar sem mudanca
     // 1x por salvar com mudanca

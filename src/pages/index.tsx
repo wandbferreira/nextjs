@@ -2,7 +2,7 @@ import TaskForm from '@/components/TaskForm/TaskForm';
 import TaskList from '@/components/TaskList/TaskList';
 import { fetchTasks, generateId, saveTasks } from '@/services/tasks.service';
 import { DraftTask, Task } from '@/types/tasks';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function TaskPage() {
   console.log('this is task page');
@@ -17,35 +17,40 @@ export default function TaskPage() {
     setTasks(fetchTasks());
   }, []);
 
-  function save(draft: DraftTask | Task) {
-    const isNew = !draft.id;
-    const updatedTasks: Task[] = isNew
-      ? [{ ...draft, id: generateId(), completed: false }, ...tasks]
-      : tasks.map((t) => (t.id === draft.id ? { ...t, ...draft } : t));
+  useEffect(() => {
+    saveTasks(tasks);
+  }, [tasks]);
 
-    updateTasks(updatedTasks);
-  }
+  const save = useCallback((draft: DraftTask | Task) => {
+    setTasks((prev) => {
+      const isNew = !draft.id;
+      const updatedTasks: Task[] = isNew
+        ? [{ ...draft, id: generateId(), completed: false }, ...prev]
+        : prev.map((t) => (t.id === draft.id ? { ...t, ...draft } : t));
+
+      saveTasks(updatedTasks);
+      return updatedTasks;
+    });
+  }, []);
 
   function toggle(taskId: number) {
-    const updatedTasks = tasks.map((t) =>
-      t.id === taskId ? { ...t, completed: !t.completed } : t,
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === taskId ? { ...t, completed: !t.completed } : t,
+      ),
     );
-    updateTasks(updatedTasks);
   }
 
   function remove(taskId: number) {
-    const updatedTasks = tasks.filter((t) => t.id !== taskId);
-    updateTasks(updatedTasks);
-    setDraft({ title: '', description: '' });
+    setTasks((prev) => prev.filter((t) => t.id !== taskId));
+
+    if (taskId === draft.id) {
+      setDraft({ title: '', description: '' });
+    }
   }
 
   function enableEditing(task: Task) {
     setDraft(task);
-  }
-
-  function updateTasks(updatedTasks: Task[]) {
-    setTasks(updatedTasks);
-    saveTasks(updatedTasks);
   }
 
   return (
